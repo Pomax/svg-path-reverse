@@ -1,0 +1,234 @@
+<!doctype html>
+<html>
+  <head>
+    <title>reversing svg</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="reverse.js"></script>
+    <script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", function(){
+        var path = document.getElementById('path');
+        var d = path.getAttribute("d").trim();
+        // normalise the original path
+        var d2 = SVGPathEditor.normalizePath(d);
+        document.getElementById('output2').setAttribute("d",d2);
+        // reverse the entire normalised path
+        var d3 = SVGPathEditor.reverseNormalizedPath(d2);
+        document.getElementById('output3').setAttribute("d",d3);
+        // selectively reverse subpaths
+        var d4 = SVGPathEditor.reverseSubPath(d, 0);
+        document.getElementById('output4').setAttribute("d",d4);
+        document.getElementById('output4eo').setAttribute("d",d4);
+        document.getElementById('output4eo').setAttribute("style","fill-rule: evenodd");
+        var d5 = SVGPathEditor.reverseSubPath(d, 1);
+        document.getElementById('output5').setAttribute("d",d5);
+        document.getElementById('output5eo').setAttribute("d",d5);
+        document.getElementById('output5eo').setAttribute("style","fill-rule: evenodd");
+        var d6 = SVGPathEditor.reverseSubPath(d, 2);
+        document.getElementById('output6').setAttribute("d",d6);
+        document.getElementById('output6eo').setAttribute("d",d6);
+        document.getElementById('output6eo').setAttribute("style","fill-rule: evenodd");
+      },false);
+    </script>
+    <style>
+      a {
+        text-decoration: none;
+      }
+      td {
+        width: 250px;
+        height: 200px;
+        vertical-align: top;
+        padding: 0px 10px;
+      }
+
+      svg {
+        height: 150px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Reversing an svg path</h1>
+
+    <h3><em>Because canvas doesn't like the even/odd crossing number algorithm</em></h3>
+
+    <p>SVG is a funny thing. You can create arbitrary vector shapes
+    by drawing paths, but when it becomes time to get some cutouts
+    going on (like, say, to generate the letter 'O') you get to pick
+    the algorithm you want to use, and consequently how precise you
+    want to be with path direction. SVG supports two algorithms for
+    determining whether a point lies inside or outside a path shape,
+    which determines whether or not the path the point lies in is
+    filled or not.</p>
+
+    <p>1) The "even/odd" crossing number. For a point inside a closed
+    shape this draws a virtual line from that point to some arbitrary
+    point "infinitely" far away, and then counts how many path lines
+    that crosses. If the number is even, the point is "inside" the
+    overall shape and that part of the shape is filled. If it's odd,
+    it's "outside" the shape and that part of the shape is left alone.</p>
+
+    <p>2) The "non-zero" crossing number. This does the same thing
+    but then checks whether the number of paths seen is 0, or some
+    non-zero value. If it's non-zero, the point lies inside the path
+    shape, and the shape around it gets filled. However, there is an
+    exception to that rule opposite-directed subpaths: if you draw a
+    clockwise circle, and then put a counter-clockwise smaller circle
+    inside of it, both algorithms will consider that a cut-out.</p>
+
+    <p>Canvas2D only supports one algorithm. The non-zero one. This
+    is decidedly useless, but we're stuck with it. So what can we do?
+    Well, we can find out which algorithm SVG uses, and then flip
+    subpaths to make sure that the shape is correct under non-zero
+    rules. <a href="reverse.js"><em>All you need is some JavaScript</em></a>
+    <sup>(tm)</sup>.
+    The following shape is the letter "B" (upside down) from Adobe's
+    "Kozuka Mincho Pro" Regular. This is an OpenType font with Type 2
+    charstring vector outlines, and these outlines are well designed:
+    the outer path is drawn in one direction, and the two cutouts are
+    drawn in the opposite direction. So... what happens when we tell
+    an SVG file to use the "nonzero" algorithm, and reverse the
+    various subpaths?</p>
+
+    <table><tr><td>
+      original
+      <svg>
+        <g transform="scale(0.2)">
+          <path id="path"
+                d="m114 112c0-74-6-80-79-80l0-32l285 0c94 0 150 22 188 62c36 37 54 87 54 148c0 116-98 177-213 181l0 2c163 27 178 134 178 181c0 52-24 95-61 123c-48 36-103 43-188 43l-243 0l0-32c73 0 79-6 79-80 Z
+                   m179 590c105 0 149-56 149-136c0-104-69-156-174-156l-70 0l0 258c0 25 3 34 28 34Z
+                   m-4-333c63 0 109-13 139-40c31-27 49-66 49-115c0-110-46-171-157-171l-83 0c-31 0-37 8-37 50l0 276Z"
+                fill="grey"
+                stroke="blue"/>
+        </g>
+      </svg>
+      This shape consists of three subpaths, one large
+      shape (clockwise), one small cutout (counter-clockwise)
+      and a slighty bigger cutout (counter-clockwise).
+    </td><td>
+      normalised
+      <svg>
+        <g transform="scale(0.2)">
+          <path id="output2"
+                d="M 0 0 Z"
+                fill="grey"
+                stroke="red"
+                style="fill-rull: nonzero;"/>
+        </g>
+      </svg>
+      Here, we've replaced all SVG shortcut commands with their
+      their normal command counterparts, and turned all relative
+      coordinates into absolute coordinates. This should look
+      <em>exactly</em> the same.
+    </td><td>
+      normalised, reversed
+      <svg>
+        <g transform="scale(0.2)">
+          <path id="output3"
+                d="M 0 0 Z"
+                fill="grey"
+                stroke="purple"
+                style="fill-rull: nonzero;"/>
+        </g>
+      </svg>
+      As you can see, reversing the direction uniformly for
+      every subpath in the shape does absolutely nothing.
+      Which makes sense, because the difference in direction
+      is maintained.
+    </td></tr></table>
+
+    <p>Using the even/odd algorithm, we can reverse
+    as many subpaths as we want, and it won't affect
+    the look of the shape:</p>
+
+    <table><tr><td>
+      first subpath reversed
+      <svg>
+        <g transform="scale(0.2)">
+          <path id="output4eo"
+                d="M 0 0 Z"
+                fill="grey"
+                stroke="purple"
+                style="fill-rull: evenodd;"/>
+        </g>
+      </svg>
+    </td><td>
+      second subpath reversed
+      <svg>
+        <g transform="scale(0.2)">
+          <path id="output5eo"
+                d="M 0 0 Z"
+                fill="grey"
+                stroke="purple"/>
+        </g>
+      </svg>
+    </td><td>
+      third subpath reversed
+      <svg>
+        <g transform="scale(0.2)">
+          <path id="output6eo"
+                d="M 0 0 Z"
+                fill="grey"
+                stroke="purple"
+                style="fill-rull: nonzero;"/>
+        </g>
+      </svg>
+    </td></tr></table>
+
+    <p>For the non-zero algorithm, however, reversals
+    matter a great deal:</p>
+
+    <table><tr><td>
+      first subpath reversed
+      <svg>
+        <g transform="scale(0.2)">
+          <path id="output4"
+                d="M 0 0 Z"
+                fill="grey"
+                stroke="purple"
+                style="fill-rull: nonzero;"/>
+        </g>
+      </svg>
+      When we reverse the direction of the first subpath,
+      we have a counter-clockwise big outline, and two
+      counter-clockwise cutouts. Since they're all in the
+      same direction, the biggest outline determines the fill.
+    </td><td>
+      second subpath reversed
+      <svg>
+        <g transform="scale(0.2)">
+          <path id="output5"
+                d="M 0 0 Z"
+                fill="grey"
+                stroke="purple"/>
+        </g>
+      </svg>
+      When we reverse one of the cutouts, it no
+      longer counts as cutout under nonzero
+      algorithm rules.
+    </td><td>
+      third subpath reversed
+      <svg>
+        <g transform="scale(0.2)">
+          <path id="output6"
+                d="M 0 0 Z"
+                fill="grey"
+                stroke="purple"/>
+        </g>
+      </svg>
+      Of course it doesn't matter which of the
+      cutouts we reverse. It's not going to count
+      as cut-out.
+    </td></tr></table>
+
+    <p>So, when we want to use an SVG image as data
+    for drawing on a Canvas2D surface (because
+    sometimes you want to rasterize that data for
+    blending it with other graphics), we can now look
+    at which algorithm the SVG uses, and whether that
+    will cause problems when doing straight
+    rasterisation to the canvas. If it will, we
+    can reverse offending subpaths and make sweet,
+    sweet HTML5 love happen anyway.</p>
+
+    <p>- Mike "Pomax" Kamermans</p>
+  </body>
+</html>
