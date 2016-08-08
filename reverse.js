@@ -1,3 +1,9 @@
+/**
+ * https://github.com/Pomax/svg-to-something
+ * 
+ * This code is in the public domain, except in jurisdictions that do
+ * not recognise the public domain, where this code is MIT licensed.
+ */
 var SVGPathEditor = (function() {
   return {
     /**
