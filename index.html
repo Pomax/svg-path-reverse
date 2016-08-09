@@ -9,21 +9,21 @@
         var path = document.getElementById('path');
         var d = path.getAttribute("d").trim();
         // normalise the original path
-        var d2 = SVGPathEditor.normalizePath(d);
+        var d2 = SVGPathEditor.normalize(d);
         document.getElementById('output2').setAttribute("d",d2);
         // reverse the entire normalised path
-        var d3 = SVGPathEditor.reverseNormalizedPath(d2);
+        var d3 = SVGPathEditor.reverseNormalized(d2);
         document.getElementById('output3').setAttribute("d",d3);
         // selectively reverse subpaths
-        var d4 = SVGPathEditor.reverseSubPath(d, 0);
+        var d4 = SVGPathEditor.reverse(d, 0);
         document.getElementById('output4').setAttribute("d",d4);
         document.getElementById('output4eo').setAttribute("d",d4);
         document.getElementById('output4eo').setAttribute("style","fill-rule: evenodd");
-        var d5 = SVGPathEditor.reverseSubPath(d, 1);
+        var d5 = SVGPathEditor.reverse(d, 1);
         document.getElementById('output5').setAttribute("d",d5);
         document.getElementById('output5eo').setAttribute("d",d5);
         document.getElementById('output5eo').setAttribute("style","fill-rule: evenodd");
-        var d6 = SVGPathEditor.reverseSubPath(d, 2);
+        var d6 = SVGPathEditor.reverse(d, 2);
         document.getElementById('output6').setAttribute("d",d6);
         document.getElementById('output6eo').setAttribute("d",d6);
         document.getElementById('output6eo').setAttribute("style","fill-rule: evenodd");
