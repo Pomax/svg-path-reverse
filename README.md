@@ -26,7 +26,6 @@ var reversed = reverse(path);
 var reversed2 = reverse(reversed);
 
 console.log("reversing is idempotent:", normalized === reversed2);
-
 ```
 
 ## LICENSE
