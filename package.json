@@ -1,0 +1,24 @@
+{
+  "name": "svg-path-reverse",
+  "version": "1.0.0",
+  "description": "Reverse an SVG path (or subpath)",
+  "main": "reverse.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pomax/svg-path-reverse.git"
+  },
+  "keywords": [
+    "SVG",
+    "path",
+    "reverse"
+  ],
+  "author": "Pomax",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Pomax/svg-path-reverse/issues"
+  },
+  "homepage": "https://github.com/Pomax/svg-path-reverse#readme"
+}
