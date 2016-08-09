@@ -321,7 +321,7 @@
       }
     }
 
-    return paths.join(" ");
+    return paths.join(" ").replace(/ +/g,' ');
   };
 
   /**

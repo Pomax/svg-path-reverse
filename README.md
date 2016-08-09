@@ -28,6 +28,24 @@ var reversed2 = reverse(reversed);
 console.log("reversing is idempotent:", normalized === reversed2);
 ```
 
+The `reverse` function can take an optional second argument to reverse a specific subpath in a compound SVG path:
+
+```
+var utils = ... // load however you know to load libraries
+var reverse = utils.reverse,
+    normalize = utils.normalize;
+
+var path ="m0 0l10 0 0 10 -10 0z m10 10l10 0 0 10 -10 0z";
+
+var normalized = normalize(path);
+var reversed = reverse(path, 1);
+var reversed2 = reverse(reversed, 1);
+
+console.log("subpath reversing is also idempotent:", normalized === reversed2);
+```
+
+
+
 ## LICENSE
 
 This code is in the public domain, except in jurisdictions that do not recognise the public domain, where this code is MIT licensed.
