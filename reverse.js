@@ -243,7 +243,7 @@
         matcher = new RegExp('[MLCQZ]','')
 
     for (t = 0; t < tlen; t++) {
-      term = terms[t];
+      let term = terms[t];
       // Is this an operator? If it is, run through its
       // argument list, which we know is fixed length.
       if (matcher.test(term)) {
