@@ -232,18 +232,19 @@
    *   - the path start must become M.
    */
   function reverseNormalizedPath(normalized) {
-    var terms = normalized.split(' '),
-        tlen = terms.length,
-        tlen1 = tlen-1,
-        t,
-        reversed = [],
-        x, y,
-        pair, pairs,
+    var pair, pairs,
         shift,
-        matcher = new RegExp('[MLCQZ]','')
-
+        t,
+        term,
+        x, y,
+        matcher = new RegExp('[MLCQZ]',''),
+        reversed = [],
+        terms = normalized.split(' '),
+        tlen = terms.length,
+        tlen1 = tlen-1
+        
     for (t = 0; t < tlen; t++) {
-      let term = terms[t];
+      term = terms[t];
       // Is this an operator? If it is, run through its
       // argument list, which we know is fixed length.
       if (matcher.test(term)) {
