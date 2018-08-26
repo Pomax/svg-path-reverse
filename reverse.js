@@ -233,6 +233,7 @@
    */
   function reverseNormalizedPath(normalized) {
     var terms = normalized.split(' '),
+        term,
         tlen = terms.length,
         tlen1 = tlen-1,
         t,
