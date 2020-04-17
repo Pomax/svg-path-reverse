@@ -1,6 +1,6 @@
 /**
  * https://github.com/Pomax/svg-to-something
- * 
+ *
  * This code is in the public domain, except in jurisdictions that do
  * not recognise the public domain, where this code is MIT licensed.
  */
@@ -224,15 +224,16 @@
    * coordinates ordered pairwise) and shift the operators left by
    * one or two coordinate pairs depending on the operator:
    *
-   *   - Z disappears,
-   *   - M becomes Z,
+   *   - Z is removed (after noting it existed),
    *   - L moves to 2 spots earlier (skipping one coordinate),
    *   - Q moves to 2 spots earlier (skipping one coordinate),
-   *   - C moves to 4 spots earlier (skipping two coordinates),
-   *   - the path start must become M.
+   *   - C moves to 4 spots earlier (skipping two coordinates)
+   *       and its arguments get reversed,
+   *   - the path start becomes M.
+   *   - the path end becomes Z iff it was there to begin with.
    */
   function reverseNormalizedPath(normalized) {
-    var terms = normalized.split(' '),
+    var terms = normalized.trim().split(' '),
         term,
         tlen = terms.length,
         tlen1 = tlen-1,
@@ -241,10 +242,12 @@
         x, y,
         pair, pairs,
         shift,
-        matcher = new RegExp('[MLCQZ]','')
+        matcher = new RegExp('[MLCQZ]',''),
+        closed = terms.slice(-1)[0].toUpperCase() === 'Z';
 
     for (t = 0; t < tlen; t++) {
       term = terms[t];
+
       // Is this an operator? If it is, run through its
       // argument list, which we know is fixed length.
       if (matcher.test(term)) {
@@ -255,7 +258,7 @@
         else if (term === "Q") { pairs = 2; shift = 1; }
         else if (term === "L") { pairs = 1; shift = 1; }
         else if (term === "M") { pairs = 1; shift = 0; }
-        else /*if (term === "Z")*/ { reversed.push("M"); continue; }
+        else { continue; }
 
         // do the argument reading and operator shifting
         if (pairs === shift) {
@@ -283,15 +286,17 @@
                "Either the path is not normalised, or it's malformed."); }
     }
 
+    reversed.push('M');
+
     // generating the reversed path string involves
     // running through our transformed terms in reverse.
     var revstring = "", rlen1 = reversed.length-1, r;
     for (r = rlen1; r > 0; r--) {
       revstring += reversed[r] + " ";
     }
-
-    revstring += "Z";
+    if (closed) revstring += "Z";
     revstring = revstring.replace(/M M/g,'Z M');
+
     return revstring;
   };
 
