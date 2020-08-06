@@ -44,6 +44,11 @@
         cy = 0,
         cx2 = 0,
         cy2 = 0,
+        rx = 0,
+        ry = 0,
+        xrot = 0,
+        lflag = 0,
+        sweep = 0,
         normalized = "";
 
     // we run through the instruction list starting at 1, not 0,
@@ -205,6 +210,28 @@
         }
       }
 
+      //   rx ry x-axis-rotation large-arc-flag sweep-flag  x   y
+      // a 25,25             -30              0,         1 50,-25
+
+      // arc command
+      else if(lop === "a") {
+        for (a = 0; a < alen; a += 7) {
+          rx = args[a];
+          ry = args[a+1];
+          xrot = args[a+2];
+          lflag = args[a+3];
+          sweep = args[a+4];
+          if (op === "a") {
+            x += args[a+5];
+            y += args[a+6];
+          } else {
+            x = args[a+5];
+            y = args[a+6];
+          }
+          normalized += "A " + rx + " " + ry + " " + xrot + " " + lflag + " " + sweep + " " + x + " " + y + " ";
+        }
+      }
+
       else if(lop === "z") {
         normalized += "Z ";
         // not unimportant: path closing changes the current x/y coordinate
@@ -242,7 +269,7 @@
         x, y,
         pair, pairs,
         shift,
-        matcher = new RegExp('[MLCQZ]',''),
+        matcher = new RegExp('[QAZLCM]',''),
         closed = terms.slice(-1)[0].toUpperCase() === 'Z';
 
     for (t = 0; t < tlen; t++) {
@@ -251,10 +278,24 @@
       // Is this an operator? If it is, run through its
       // argument list, which we know is fixed length.
       if (matcher.test(term)) {
+        // Arc processing relies on not-just-coordinates
+        if (term === "A") {
+          reversed.push(terms[t+5] === '0' ? '1' : '0');
+          reversed.push(terms[t+4]);
+          reversed.push(terms[t+3]);
+          reversed.push(terms[t+2]);
+          reversed.push(terms[t+1]);
+          reversed.push(term);
+          reversed.push(terms[t+7]);
+          reversed.push(terms[t+6]);
+          t += 7;
+          continue;
+        }
+
         // how many coordinate pairs do we need to read,
         // and by how many pairs should this operator be
         // shifted left?
-             if (term === "C") { pairs = 3; shift = 2; }
+        else if (term === "C") { pairs = 3; shift = 2; }
         else if (term === "Q") { pairs = 2; shift = 1; }
         else if (term === "L") { pairs = 1; shift = 1; }
         else if (term === "M") { pairs = 1; shift = 0; }
@@ -327,7 +368,7 @@
       }
     }
 
-    return paths.join(" ").replace(/ +/g,' ');
+    return paths.join(" ").replace(/ +/g,' ').trim();
   };
 
   /**
