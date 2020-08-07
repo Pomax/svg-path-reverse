@@ -278,6 +278,7 @@
       // Is this an operator? If it is, run through its
       // argument list, which we know is fixed length.
       if (matcher.test(term)) {
+
         // Arc processing relies on not-just-coordinates
         if (term === "A") {
           reversed.push(terms[t+5] === '0' ? '1' : '0');
