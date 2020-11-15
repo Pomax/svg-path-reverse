@@ -34,6 +34,7 @@
         op,
         lop,
         args = [],
+        oargs = [],
         alen,
         a,
         sx = 0,
@@ -63,8 +64,9 @@
 
       // what are the arguments? note that we need to convert
       // all strings into numbers, or + will do silly things.
-      args = instruction.replace(op,'').trim().split(' ');
-      args = args.filter(function(v) { return v !== ''; }).map(parseFloat);
+      args = instruction.replace(op,'').trim().split(' ').filter(function(v) { return v !== ''; });
+      oargs = args;
+      args = args.map(parseFloat);
       alen = args.length;
 
       // we could use a switch, but elaborate code in a "case" with
@@ -219,8 +221,29 @@
           rx = args[a];
           ry = args[a+1];
           xrot = args[a+2];
+
+          lflag = oargs[a+3]; // we need the original string to deal with leading zeroes
+          let fixed = false;
+
+          if(lflag.length > 1) {
+            let b1 = parseInt(lflag[0]),
+                b2 = parseInt(lflag[1]),
+                rest = undefined;
+            if(lflag.length > 2) rest = parseFloat(lflag.substring(2));
+            args[a+3] = b1;
+            args.splice(a+4, 0, b2);
+            if (rest!==undefined) args.splice(a+5, 0, rest);
+            fixed = true;
+          }
           lflag = args[a+3];
+
+          sweep = fixed ? args[a+4] : oargs[a+4]; // we need the original string to deal with leading zeroes
+          if(!fixed && sweep.length > 1) {
+            args[a+4] = parseInt(sweep[0]);
+            args.splice(a+5, 0, parseFloat(sweep.substring(1)));
+          }
           sweep = args[a+4];
+
           if (op === "a") {
             x += args[a+5];
             y += args[a+6];
@@ -228,6 +251,7 @@
             x = args[a+5];
             y = args[a+6];
           }
+
           normalized += "A " + rx + " " + ry + " " + xrot + " " + lflag + " " + sweep + " " + x + " " + y + " ";
         }
       }
