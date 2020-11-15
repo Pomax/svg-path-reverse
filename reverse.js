@@ -21,10 +21,10 @@
    */
   function normalizePath(d) {
     // preprocess "d" so that we have spaces between values
-    d = d.replace(/,/g,' ')     // replace commas with spaces
-         .replace(/-/g,' - ')    // add spacing around minus signs
-         .replace(/-\s+/g,'-')  // remove spacing to the right of minus signs.
-         .replace(/([a-zA-Z])/g," $1 ");
+    d = d.replace(/,/g,' ')
+         .replace(/-/g,' -')
+         .replace(/\s*([achlmqstvzACHLMQSTVZ])\s*/g," $1 ")
+         .replace(/\s+/g, ' ');
 
     // set up the variables used in this function
     var instructions = d.replace(/([a-zA-Z])\s?/g,"|$1").split("|"),
