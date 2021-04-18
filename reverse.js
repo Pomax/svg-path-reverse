@@ -22,12 +22,12 @@
   function normalizePath(d) {
     // preprocess "d" so that we have spaces between values
     d = d.replace(/,/g,' ')
-         .replace(/-/g,' -')
+         .replace(/([^eE])-/g,'$1 -')
          .replace(/\s*([achlmqstvzACHLMQSTVZ])\s*/g," $1 ")
          .replace(/\s+/g, ' ');
 
     // set up the variables used in this function
-    var instructions = d.replace(/([a-zA-Z])\s?/g,"|$1").split("|"),
+    var instructions = d.replace(/([achlmqstvzACHLMQSTVZ])\s?/g,"|$1").split("|"),
         instructionLength = instructions.length,
         i,
         instruction,
