@@ -44,9 +44,9 @@ var reversed2 = reverse(reversed, 1);
 console.log("subpath reversing is also idempotent:", normalized === reversed2);
 ```
 
-## What's supported?
+## Working on the code
 
-This utility should supports all pathing instructions and delimiting formats, but **_does not support numbers that use scientific notation_**, as there is no situation in which your SVG should contain coordinate values that are so large, or so small, as to require scientific numbering. If your SVG contains scientific numbers, something went _very_ wrong in generating it, and you should be looking at that first.
+There's no fancy build system here: update the code, update test.js, then run your tests using `node test.js`.
 
 ## LICENSE
 
