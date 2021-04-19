@@ -1,0 +1,29 @@
+name: CI-CD
+
+on:
+  pull_request:
+    branches:
+      - gh-pages
+
+jobs:
+  build:
+    name: CI testing for the js library
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Installing latest Node
+        run: |
+          wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+          sh ~/.nvm/nvm.sh install latest
+          sh ~/.nvm/nvm.sh use latest
+
+      - name: Installing dependencies
+        run: |
+          npm install
+          echo "finished installing dependencies"
+
+      - name: Running th tests
+        run: |
+          echo "running build..."
+          node test.js
