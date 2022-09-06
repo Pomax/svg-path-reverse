@@ -22,7 +22,7 @@
   function normalizePath(d) {
     // regular expression for detecting and replacing multiple decimal points
     // in a continuous string
-    var regexp = /(\d*\.\d+)((\.\d*)+)/g;
+    var regexp = /(\d*\.\d+([eE]-?\d+)?)((\.\d*)+)/g;
 
     // preprocess "d" so that we have spaces between values
     d = d.replace(/,/g,' ')
@@ -31,7 +31,7 @@
          .replace(/\s+/g, ' ');
 
     while (regexp.test(d)) {
-      d = d.replace(regexp, '$1 $2');
+      d = d.replace(regexp, '$1 $3');
     }
 
     // set up the variables used in this function
