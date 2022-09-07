@@ -70,8 +70,8 @@ normalized = normalize(path);
 if (normalized !== prenormalized) fail(`multiple decimal points (normalize): ${normalized}`);
 if (prenormalized !== reverse(reverse(path))) fail('multiple decimal points (round trip)');
 
-path = "m0 0 L 100 0 L 1.0e2.1e3 L 0 100 z";
-prenormalized = "M 0 0 L 100 0 L 100 100 L 0 100 Z";
+path = "m0 0 L 100 0 L 1.0e2.1e3 L 200.0e-1.1e3 z";
+prenormalized = "M 0 0 L 100 0 L 100 100 L 20 100 Z";
 normalized = normalize(path);
 if (normalized !== prenormalized) fail(`multiple decimal points with scientific notation (normalize): ${normalized}`);
 if (prenormalized !== reverse(reverse(path))) fail('multiple decimal points with scientific notation (round trip)');
