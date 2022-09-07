@@ -20,19 +20,12 @@
    * and/or shortcut commands.
    */
   function normalizePath(d) {
-    // regular expression for detecting and replacing multiple decimal points
-    // in a continuous string
-    var regexp = /(\d*\.\d+([eE]-?\d+)?)((\.\d*)+)/g;
-
     // preprocess "d" so that we have spaces between values
     d = d.replace(/,/g,' ')
          .replace(/([^eE])-/g,'$1 -')
          .replace(/\s*([achlmqstvzACHLMQSTVZ])\s*/g," $1 ")
-         .replace(/\s+/g, ' ');
-
-    while (regexp.test(d)) {
-      d = d.replace(regexp, '$1 $3');
-    }
+         .replace(/\s+/g, ' ')
+         .replace(/(\d*\.\d+([eE]-?\d+)?)((\.\d*)+)/g, (_, g1, g2, g3) => g1 + g3.replaceAll(".", " ."));
 
     // set up the variables used in this function
     var instructions = d.replace(/([achlmqstvzACHLMQSTVZ])\s?/g,"|$1").split("|"),
