@@ -24,7 +24,8 @@
     d = d.replace(/,/g,' ')
          .replace(/([^eE])-/g,'$1 -')
          .replace(/\s*([achlmqstvzACHLMQSTVZ])\s*/g," $1 ")
-         .replace(/\s+/g, ' ');
+         .replace(/\s+/g, ' ')
+         .replace(/(\d*\.\d+([eE]-?\d+)?)((\.\d+)+)/g, (_, g1, g2, g3) => g1 + g3.replaceAll(".", " ."));
 
     // set up the variables used in this function
     var instructions = d.replace(/([achlmqstvzACHLMQSTVZ])\s?/g,"|$1").split("|"),

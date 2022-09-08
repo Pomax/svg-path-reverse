@@ -62,3 +62,16 @@ prenormalized = "M 0.1 0 L 10.1 10";
 normalized = normalize(path);
 if (normalized !== prenormalized) fail(`scientific notation, uppercase, negative exponent (normalize): ${normalized}`);
 if (prenormalized !== reverse(reverse(path))) fail("scientific notation, uppercase, negative exponent (round trip)");
+
+
+path = "M20 43c.027.07.074.119.139.144.067.028.131.037.191.026";
+prenormalized = "M 20 43 C 20.027 43.07 20.074 43.119 20.139 43.144 C 20.206 43.172 20.27 43.181 20.33 43.17";
+normalized = normalize(path);
+if (normalized !== prenormalized) fail(`multiple decimal points (normalize): ${normalized}`);
+if (prenormalized !== reverse(reverse(path))) fail('multiple decimal points (round trip)');
+
+path = "m0 0 L 100 0 L 1.0e2.1e3 L 200.0e-1.1e3 z";
+prenormalized = "M 0 0 L 100 0 L 100 100 L 20 100 Z";
+normalized = normalize(path);
+if (normalized !== prenormalized) fail(`multiple decimal points with scientific notation (normalize): ${normalized}`);
+if (prenormalized !== reverse(reverse(path))) fail('multiple decimal points with scientific notation (round trip)');
