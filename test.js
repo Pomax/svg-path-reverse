@@ -75,3 +75,17 @@ prenormalized = "M 0 0 L 100 0 L 100 100 L 20 100 Z";
 normalized = normalize(path);
 if (normalized !== prenormalized) fail(`multiple decimal points with scientific notation (normalize): ${normalized}`);
 if (prenormalized !== reverse(reverse(path))) fail('multiple decimal points with scientific notation (round trip)');
+
+
+path = "M249.834 243.462s120.037 20.777 149.95 26.898l129.125 22.26";
+prenormalized = "M 249.834 243.462 C 249.834 243.462 369.871 264.239 399.784 270.36 L 528.909 292.62";
+normalized = normalize(path);
+if (normalized !== prenormalized) fail(`smooth cubic Bézier without previous Bézier (normalize): ${normalized}`);
+if (prenormalized !== reverse(reverse(path))) fail('smooth cubic Bézier without previous Bézier');
+
+
+path = "M 110,90 c 20,0 15,-80 40,-80 s 20,80 40,80";
+prenormalized = "M 110 90 C 130 90 125 10 150 10 C 175 10 170 90 190 90";
+normalized = normalize(path);
+if (normalized !== prenormalized) fail(`smooth cubic Bézier with previous Bézier (normalize): ${normalized}`);
+if (prenormalized !== reverse(reverse(path))) fail('smooth cubic Bézier with previous Bézier');
