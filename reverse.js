@@ -34,7 +34,7 @@
         instruction,
         op,
         lop,
-        preop,
+        prevop,
         args = [],
         oargs = [],
         alen,
@@ -268,7 +268,7 @@
         y = sy;
       }
 
-      preop = lop;
+      prevop = lop;
     }
     return normalized.trim();
   };
