@@ -195,16 +195,12 @@
       }
       else if(lop === "s") {
         for (a = 0; a < alen; a += 4) {
-          if (["s", "c"].includes(preop)) {
-            // reflect previous cx2/cy2 over x/y
-            cx = x + (x-cx2);
-            cy = y + (y-cy2);
+          cx = x;
+          cy = y;
+          if (["s", "c"].includes(prevop)) {
+            cx += (x-cx2);
+            cy += (y-cy2);
           }
-          else {
-            cx = x;
-            cy = y;
-          }
-
           // then get real control and end point
           if (op === "s") {
             cx2 = x + args[a];
