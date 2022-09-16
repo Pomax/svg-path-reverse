@@ -197,7 +197,7 @@
         for (a = 0; a < alen; a += 4) {
           cx = x;
           cy = y;
-          if (["s", "c"].includes(prevop)) {
+          if (["s", "c"].indexOf(prevop) > -1) {
             cx += (x-cx2);
             cy += (y-cy2);
           }
