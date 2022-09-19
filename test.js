@@ -89,3 +89,17 @@ prenormalized = "M 110 90 C 130 90 125 10 150 10 C 175 10 170 90 190 90";
 normalized = normalize(path);
 if (normalized !== prenormalized) fail(`smooth cubic Bézier with previous Bézier (normalize): ${normalized}`);
 if (prenormalized !== reverse(reverse(path))) fail('smooth cubic Bézier with previous Bézier');
+
+
+path = "M 25,25 t 15,25 30,0 30,0 30,0"
+prenormalized = "M 25 25 Q 25 25 40 50 Q 55 75 70 50 Q 85 25 100 50 Q 115 75 130 50";
+normalized = normalize(path);
+if (normalized !== prenormalized) fail(`quadratic Bézier without previous Bézier (normalize): ${normalized}`);
+if (prenormalized !== reverse(reverse(path))) fail('quadratic Bézier without previous Bézier');
+
+
+path = "M 10,50 Q 25,25 40,50 t 30,0 30,0 30,0 30,0 30,0"
+prenormalized = "M 10 50 Q 25 25 40 50 Q 55 75 70 50 Q 85 25 100 50 Q 115 75 130 50 Q 145 25 160 50 Q 175 75 190 50";
+normalized = normalize(path);
+if (normalized !== prenormalized) fail(`quadratic Bézier with previous Bézier (normalize): ${normalized}`);
+if (prenormalized !== reverse(reverse(path))) fail('quadratic Bézier with previous Bézier');

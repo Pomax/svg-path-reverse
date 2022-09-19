@@ -157,9 +157,16 @@
       }
       else if(lop === "t") {
         for (a = 0; a < alen; a += 2) {
-          // reflect previous cx/cy over x/y
-          cx = x + (x-cx);
-          cy = y + (y-cy);
+          if (["t", "q"].indexOf(prevop) > -1) {
+            // reflect previous cx/cy over x/y
+            cx = x + (x-cx);
+            cy = y + (y-cy);
+          }
+          else {
+            cx = x;
+            cy = y;
+            prevop = lop;
+          }
           // then get real end point
           if (op === "t") {
             x += args[a];
