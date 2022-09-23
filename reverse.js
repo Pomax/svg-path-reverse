@@ -165,7 +165,6 @@
           else {
             cx = x;
             cy = y;
-            prevop = lop;
           }
           // then get real end point
           if (op === "t") {
@@ -176,6 +175,7 @@
             y  = args[a+1];
           }
           normalized += "Q " + cx + " " + cy + " "  + x + " " + y + " ";
+          prevop = lop;
         }
       }
 
