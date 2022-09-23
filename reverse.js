@@ -34,6 +34,7 @@
         instruction,
         op,
         lop,
+        prevop,
         args = [],
         oargs = [],
         alen,
@@ -156,9 +157,15 @@
       }
       else if(lop === "t") {
         for (a = 0; a < alen; a += 2) {
-          // reflect previous cx/cy over x/y
-          cx = x + (x-cx);
-          cy = y + (y-cy);
+          if (["t", "q"].indexOf(prevop) > -1) {
+            // reflect previous cx/cy over x/y
+            cx = x + (x-cx);
+            cy = y + (y-cy);
+          }
+          else {
+            cx = x;
+            cy = y;
+          }
           // then get real end point
           if (op === "t") {
             x += args[a];
@@ -168,6 +175,7 @@
             y  = args[a+1];
           }
           normalized += "Q " + cx + " " + cy + " "  + x + " " + y + " ";
+          prevop = lop;
         }
       }
 
@@ -194,9 +202,12 @@
       }
       else if(lop === "s") {
         for (a = 0; a < alen; a += 4) {
-          // reflect previous cx2/cy2 over x/y
-          cx = x + (x-cx2);
-          cy = y + (y-cy2);
+          cx = x;
+          cy = y;
+          if (["s", "c"].indexOf(prevop) > -1) {
+            cx += (x-cx2);
+            cy += (y-cy2);
+          }
           // then get real control and end point
           if (op === "s") {
             cx2 = x + args[a];
@@ -263,6 +274,8 @@
         x = sx;
         y = sy;
       }
+
+      prevop = lop;
     }
     return normalized.trim();
   };
