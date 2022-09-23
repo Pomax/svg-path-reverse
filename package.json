@@ -1,6 +1,6 @@
 {
   "name": "svg-path-reverse",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Reverse an SVG path (or subpath)",
   "main": "reverse.js",
   "scripts": {
