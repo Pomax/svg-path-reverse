@@ -408,7 +408,7 @@
       }
     }
 
-    return paths.join(" ").replace(/ +/g,' ').trim();
+    return paths.reverse().join(" ").replace(/ +/g,' ').trim();
   };
 
   /**
