@@ -244,6 +244,7 @@
             if(lflag.length > 2) rest = parseFloat(lflag.substring(2));
             args[a+3] = b1;
             args.splice(a+4, 0, b2);
+            oargs.splice(a+4, 0, `+`);
             if (rest!==undefined) args.splice(a+5, 0, rest);
             fixed = true;
           }
