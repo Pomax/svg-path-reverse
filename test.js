@@ -1,7 +1,8 @@
-var utils = require(`./reverse.js`),
-    reverse = utils.reverse,
-    normalize = utils.normalize,
-    path, normalized, prenormalized, reversed;
+import utils from './index.js';
+
+const { reverse, normalize } = utils;
+
+let path, normalized, prenormalized, reversed;
 
 function fail(why) {
     console.log(`failed test: `, why);
