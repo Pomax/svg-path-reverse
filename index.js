@@ -13,3 +13,9 @@ export default {
   reverseNormalized: reverseNormalizedPath,
   reverse: reverseSubPath
 }
+
+export {
+  normalizePath as normalize,
+  reverseNormalizedPath as reverseNormalized,
+  reverseSubPath as reverse,
+}
