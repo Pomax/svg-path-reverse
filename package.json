@@ -6,9 +6,11 @@
     "node": ">=12.17.0"
   },
   "main": "index.js",
+  "types": "index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "node test.js"
+    "test": "node test.js",
+    "prepack": "tsc index.js -d --emitDeclarationOnly --allowJs"
   },
   "repository": {
     "type": "git",
@@ -24,5 +26,11 @@
   "bugs": {
     "url": "https://github.com/Pomax/svg-path-reverse/issues"
   },
-  "homepage": "https://github.com/Pomax/svg-path-reverse#readme"
+  "homepage": "https://github.com/Pomax/svg-path-reverse#readme",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "files": [
+    "*.{js,d.ts}"
+  ]
 }
